@@ -1,0 +1,32 @@
+{
+  "visitor": {
+    "role": "Visitor",
+    "status": "Browsing only",
+    "name": "Guest User",
+    "id": null,
+    "dob": null,
+    "address": null,
+    "photo": null,
+    "badge": null
+  },
+  "citizen": {
+    "role": "Citizen",
+    "status": "Everything is up to date",
+    "name": "John Doe",
+    "id": "2-5040465-55",
+    "dob": "4 Apr 1965",
+    "address": "Bolder St. 20, 10431 Meldrin",
+    "photo": "/src/assets/images/profiles/citizen-profile-picture.png",
+    "badge": "green"
+  },
+  "resident": {
+    "role": "Resident",
+    "status": "Action required: Resident ID is expiring soon",
+    "name": "Jane Doe",
+    "id": "3-4150490-14",
+    "dob": "15 Apr 1990",
+    "address": "Raimon II St. 15, 19421 Belmora",
+    "photo": "/src/assets/images/profiles/resident-profile-picture.png",
+    "badge": "yellow"
+  }
+}

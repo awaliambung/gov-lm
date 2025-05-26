@@ -1,0 +1,51 @@
+---
+import articles from "../../data/study-info.json";
+---
+
+<section class="bg-neutral-100 py-4">
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- Header Section -->
+    <div class="mb-6 flex">
+      <div class="bg-red-800 inline-block px-4 py-2 transform transition-transform duration-300 hover:scale-105 hover:rotate-2">
+        <h2 class="text-2xl font-bold text-white">Planning on studying here?</h2>
+      </div>
+    </div>
+
+    <!-- Articles Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <!-- Main Article -->
+      <article class="col-span-2 flex flex-col bg-neutral-100 overflow-hidden group">
+        <div class="overflow-hidden">
+          <img 
+            src={articles[0].imageUrl} 
+            alt={articles[0].title} 
+            class="aspect-[5/4] w-full object-cover" 
+          />
+        </div>
+        <div class="mt-4">
+          <h3 class="text-lg font-bold text-neutral-800">{articles[0].title}</h3>
+          <p class="text-sm text-neutral-600 mt-2">{articles[0].description}</p>
+          <a href={articles[0].link} class="text-neutral-800 font-semibold transition-colors duration-200 hover:text-neutral-90 hover:underline mt-2 inline-block">Read more →</a>
+        </div>
+      </article>
+
+      <!-- Other Articles -->
+      <div class="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+        {articles.slice(1).map((article) => (
+          <article class="flex flex-col bg-neutral-100 overflow-hidden group">
+            <div class="overflow-hidden">
+              <img 
+                src={article.imageUrl} 
+                alt={article.title} 
+                class="aspect-[3/2] w-full object-cover" 
+              />
+            </div>
+            <div class="mt-4">
+              <h3 class="text-lg font-bold text-neutral-800">{article.title}</h3>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

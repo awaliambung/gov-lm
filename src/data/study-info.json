@@ -1,0 +1,28 @@
+[
+  {
+    "title": "Tips about studying in Lumiose.",
+    "description": "How well do I need to speak the language? How can I find the right university? This is where you will find answers!",
+    "imageUrl": "/src/assets/images/study-info/image-1.png",
+    "link": "#"
+  },
+  {
+    "title": "How to easily pass the Lumior Entrance Assessment for Foreigners (LEAF).",
+    "imageUrl": "/src/assets/images/study-info/image-2.png",
+    "link": "#"
+  },
+  {
+    "title": "The top 5 most prestigious university in Lumiose.",
+    "imageUrl": "/src/assets/images/study-info/image-3.png",
+    "link": "#"
+  },
+  {
+    "title": "The biggest bachelors and masters courses entirely taught in English.",
+    "imageUrl": "/src/assets/images/study-info/image-4.png",
+    "link": "#"
+  },
+  {
+    "title": "Exchange programs in different Forestian universities.",
+    "imageUrl": "/src/assets/images/study-info/image-5.png",
+    "link": "#"
+  }
+]

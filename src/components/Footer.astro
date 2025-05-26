@@ -1,0 +1,62 @@
+---
+import Sponsor1 from '../assets/images/sponsors/temp_sponsor_1.svg';
+import Sponsor2 from '../assets/images/sponsors/temp_sponsor_2.svg';
+import Sponsor3 from '../assets/images/sponsors/temp_sponsor_3.svg';
+import Sponsor4 from '../assets/images/sponsors/temp_sponsor_4.svg';
+---
+
+<!--
+  Footer: Contact info, sponsors, and copyright
+  - Responsive layout for mobile/desktop
+  - Clean, minimal Tailwind classes
+-->
+<footer class="bg-neutral-700 text-white">
+  <div class="max-w-6xl mx-auto px-2 py-6 flex flex-col gap-6 md:flex-row md:justify-between md:items-start md:gap-8 w-full">
+    <div class="flex flex-col gap-8 md:flex-row md:gap-12 w-full">
+      <!-- Contact Information -->
+      <div>
+        <h2 class="text-neutral-400 text-base sm:text-lg font-semibold mb-2">Do you have a question? Contact us!</h2>
+        <ul class="space-y-2">
+          <li>
+            <div>Email us at:</div>
+            <div class="flex items-center gap-2 font-medium group">
+              <button type="button" class="text-white underline hover:no-underline hover:text-neutral-300 focus:outline-none transition-colors text-xs sm:text-base">
+                inquiries@gov.lm
+              </button>
+              <button type="button" class="text-white hover:underline hover:text-neutral-300 focus:outline-none transition-colors text-xs sm:text-base">
+                ⧉
+              </button>
+            </div>
+          </li>
+          <li>
+            <div>Call us on:</div>
+            <div class="font-medium text-xs sm:text-base">01 101 1109</div>
+          </li>
+          <li>
+            <div>Outside of Lumiose? Call us on:</div>
+            <div class="font-medium text-xs sm:text-base">+4 101 1 1109</div>
+          </li>
+        </ul>
+      </div>
+      <!-- Sponsors -->
+      <!--
+      <div>
+        <h2 class="text-neutral-400 text-base sm:text-lg font-semibold mb-2">Public administration portal is brought to you by</h2>
+        <div class="grid grid-cols-2 gap-3 sm:gap-4">
+          <Sponsor1 class="h-8 sm:h-10 w-auto" />
+          <Sponsor2 class="h-8 sm:h-10 w-auto" />
+          <Sponsor3 class="h-8 sm:h-10 w-auto" />
+          <Sponsor4 class="h-8 sm:h-10 w-auto" />
+        </div>
+      </div>
+      -->
+    </div>
+  </div>
+  <div class="max-w-6xl mx-auto px-2 sm:px-4">
+    <hr class="border-neutral-600 my-3 sm:my-4" />
+  </div>
+  <div class="max-w-6xl mx-auto px-2 sm:px-4 pb-3 sm:pb-4 flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm">
+    <span class="text-neutral-400">© 2025 Press and Information Office, Ministry of Foreign Affairs, Lumiose. All rights reserved.</span>
+    <span class="text-neutral-400 mt-2 md:mt-0">Version 0.0.100</span>
+  </div>
+</footer>

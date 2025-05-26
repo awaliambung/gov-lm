@@ -1,0 +1,67 @@
+---
+import SearchIcon from '../assets/icons/icon-search.svg';
+import ProfileIcon from '../assets/icons/icon-profile.svg';
+
+// List of search bar placeholder prompts
+const searchPrompts = [
+  "Update your address",
+  "Find your polling station",
+  "Search for tax records",
+  "Apply for housing support",
+  "Report a lost ID",
+  "Check your benefits",
+  "Renew your driver's licence",
+  "View local regulations"
+];
+const randomPrompt = searchPrompts[Math.floor(Math.random() * searchPrompts.length)];
+---
+
+<header class="bg-red-800 text-white w-full">
+  <div class="max-w-6xl mx-auto px-4 py-3">
+    <!-- Mobile stacks, desktop inline -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <span class="text-xl sm:text-2xl font-extrabold tracking-wide">GOV.LM</span>
+      </div>
+
+      <!-- Search & Profile wrapper -->
+      <div class="w-full sm:w-auto flex items-center justify-between gap-3">
+
+        <!-- Search Bar -->
+        <div class="relative w-full sm:w-96">
+          <input
+            type="text"
+            placeholder={randomPrompt}
+            class="w-full bg-white border border-neutral-300 rounded-lg pl-4 pr-12 py-2 text-sm text-neutral-500 outline-none placeholder-gray-400"
+          />
+          <button
+            aria-label="Search"
+            class="absolute top-1/2 right-1 transform -translate-y-1/2 w-8 h-8 bg-red-800 border rounded-lg flex items-center justify-center"
+          >
+            <SearchIcon class="h-4 w-4 text-white" />
+          </button>
+        </div>
+
+        <!-- Profile Icon & Popup -->
+        <div class="relative inline-block" id="profile-container">
+          <button
+            id="profile-summary"
+            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10"
+            aria-label="Profile"
+          >
+            <!-- Default visitor icon -->
+            <ProfileIcon class="h-6 w-auto" />
+          </button>
+
+          <div
+            id="profile-popup"
+            class="hidden absolute right-0 mt-2 w-64 sm:w-72 bg-white text-neutral-800 border border-neutral-300 rounded-xl shadow-lg z-10 overflow-hidden"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script type="module" src="/src/scripts/header.ts"></script>
