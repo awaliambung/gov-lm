@@ -1,19 +1,8 @@
 ---
-import SearchIcon from '../assets/icons/icon-search.svg';
-import ProfileIcon from '../assets/icons/icon-profile.svg';
+import { Image } from 'astro:assets';
 
-// List of search bar placeholder prompts
-const searchPrompts = [
-  "Update your address",
-  "Find your polling station",
-  "Search for tax records",
-  "Apply for housing support",
-  "Report a lost ID",
-  "Check your benefits",
-  "Renew your driver's licence",
-  "View local regulations"
-];
-const randomPrompt = searchPrompts[Math.floor(Math.random() * searchPrompts.length)];
+import iconSearch from '../assets/icons/icon-search.png';
+import iconUser from '../assets/icons/icon-user.png';
 ---
 
 <header class="bg-red-800 text-white w-full">
@@ -31,16 +20,33 @@ const randomPrompt = searchPrompts[Math.floor(Math.random() * searchPrompts.leng
         <!-- Search Bar -->
         <div class="relative w-full sm:w-96">
           <input
+            id="search-input"
             type="text"
-            placeholder={randomPrompt}
+            placeholder=""
             class="w-full bg-white border border-neutral-300 rounded-lg pl-4 pr-12 py-2 text-sm text-neutral-500 outline-none placeholder-gray-400"
           />
           <button
             aria-label="Search"
             class="absolute top-1/2 right-1 transform -translate-y-1/2 w-8 h-8 bg-red-800 border rounded-lg flex items-center justify-center"
           >
-            <SearchIcon class="h-4 w-4 text-white" />
+            <Image src={iconSearch} alt="Search" class="h-4 w-4 filter invert" />
           </button>
+          <script>
+            const placeholders = [
+              "Update your address",
+              "Find your polling station",
+              "Search for tax records",
+              "Apply for housing support",
+              "Report a lost ID",
+              "Check your benefits",
+              "Renew your driver's licence",
+              "View local regulations"
+            ];
+            const input = document.getElementById('search-input');
+            if (input && input instanceof HTMLInputElement) {
+              input.placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+            }
+          </script>
         </div>
 
         <!-- Profile Icon & Popup -->
@@ -51,7 +57,7 @@ const randomPrompt = searchPrompts[Math.floor(Math.random() * searchPrompts.leng
             aria-label="Profile"
           >
             <!-- Default visitor icon -->
-            <ProfileIcon class="h-6 w-auto" />
+            <Image src={iconUser} alt="Profile" class="h-9 w-9 rounded-full filter invert" />
           </button>
 
           <div
@@ -63,5 +69,3 @@ const randomPrompt = searchPrompts[Math.floor(Math.random() * searchPrompts.leng
     </div>
   </div>
 </header>
-
-<script type="module" src="/src/scripts/header.ts"></script>
