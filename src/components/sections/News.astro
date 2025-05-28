@@ -2,6 +2,18 @@
 import { getCollection} from 'astro:content';
 import { Image } from 'astro:assets';
 
+import image1 from '../../assets/images/news/image-1.jpg';
+import image2 from '../../assets/images/news/image-2.jpg';
+import image3 from '../../assets/images/news/image-3.jpg';
+import image4 from '../../assets/images/news/image-4.jpg';
+
+const imageMap = {
+  '/src/assets/images/news/image-1.jpg': image1,
+  '/src/assets/images/news/image-2.jpg': image2,
+  '/src/assets/images/news/image-3.jpg': image3,
+  '/src/assets/images/news/image-4.jpg': image4,
+};
+
 const articles = await getCollection('articles');
 const featured = articles.find((a) => a.data.feature);
 const sideArticles = articles.filter((a) => !a.data.feature);
@@ -21,11 +33,11 @@ const sideArticles = articles.filter((a) => !a.data.feature);
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2.5fr] items-stretch">
       <!-- Featured Article -->
       {featured && (
-      <article class="relative overflow-hidden h-full flex rounded-lg">
-        <img 
-          src={featured.data.imageURL} 
+      <article class="relative overflow-hidden h-full flex rounded-lg group">
+        <Image 
+          src={imageMap[featured.data.imageURL as keyof typeof imageMap]} 
           alt={featured.data.title || 'News image'} 
-          class="absolute inset-0 w-full h-full object-cover" 
+          class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.025]" 
           loading="lazy" 
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
@@ -46,14 +58,14 @@ const sideArticles = articles.filter((a) => !a.data.feature);
 
       <!-- Side Articles -->
       <div class="flex flex-col gap-4 h-full overflow-y-auto pr-1 custom-scroll">
-        {sideArticles.map((article) => (
-          <article class="flex gap-4 bg-white overflow-hidden rounded-lg min-h-[80px]">
-            <img 
-              src={article.data.imageURL} 
-              alt={article.data.title || 'News image'} 
-              class="w-36 h-full object-cover" 
-              loading="lazy" 
-            />
+  {sideArticles.map((article) => (
+    <article class="flex gap-4 bg-white overflow-hidden rounded-lg min-h-[80px]">
+      <Image 
+        src={imageMap[article.data.imageURL as keyof typeof imageMap]} 
+        alt={article.data.title || 'News image'} 
+        class="w-36 h-full object-cover" 
+        loading="lazy" 
+      />
             <div class="flex flex-col justify-center flex-1 p-2">
               <span class={`text-xs font-bold uppercase ${article.data.categoryColour.split(' ')[1]}`}>{article.data.category}</span>
               <h3 class="mt-1 text-sm font-bold text-neutral-800 line-clamp-2">{article.data.title}</h3>
