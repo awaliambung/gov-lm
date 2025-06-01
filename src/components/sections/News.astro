@@ -1,82 +1,147 @@
 ---
-import { getCollection} from 'astro:content';
+import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import newsCategoriesJSON from '../../data/news-categories.json';
 
-import image1 from '../../assets/images/news/image-1.jpg';
-import image2 from '../../assets/images/news/image-2.jpg';
-import image3 from '../../assets/images/news/image-3.jpg';
-import image4 from '../../assets/images/news/image-4.jpg';
+// Import all news images from the news folder.
+// « import.meta.glob » returns an object where each key is the file path and each value is the processed URL.
+// « eager: true » ensures these images are imported at build time  and « import: 'default' » grabs the default export (URL string).
+const newsImages: Record<string, string> = import.meta.glob(
+  '../../assets/images/news/*.{jpg,png}',
+  { eager: true, import: 'default' }
+);
 
-const imageMap = {
-  '/src/assets/images/news/image-1.jpg': image1,
-  '/src/assets/images/news/image-2.jpg': image2,
-  '/src/assets/images/news/image-3.jpg': image3,
-  '/src/assets/images/news/image-4.jpg': image4,
-};
-
+// Grabbing and sorting (as well as filtering the featured article) the entire articles collection.
 const articles = await getCollection('articles');
-const featured = articles.find((a) => a.data.feature);
-const sideArticles = articles.filter((a) => !a.data.feature);
+const sorted = articles.sort((a, b) => b.data.id - a.data.id);
+const featuredArticles = sorted.filter((a) => a.data.feature);
+
+// Picking a single featured article. If there are multiple, we choose the one with the highest ID.
+const featured =
+  featuredArticles.length > 0
+    ? featuredArticles.reduce(
+        (min, curr) => (curr.data.id < min.data.id ? curr : min),
+        featuredArticles[0]
+      )
+    : null;
+
+// For the remaining articles (excluding the chosen `featured`), grab the first three as "side" articles.
+const sideArticles = sorted.filter((a) => a !== featured).slice(0, 3);
+
+// Load the list of news categories from a JSON file.
+// Each category includes a name and its associated Tailwind CSS background and text colour classes.
+const newsCategories: Array<{ name: string; bg: string; text: string }> =
+  newsCategoriesJSON;
+
+// Given a category name, return the corresponding background CSS class, or a default if not found.
+function getCategoryBGClass(category: string): string {
+  const found = newsCategories.find((c) => c.name === category);
+  return found?.bg ?? 'bg-gray-400';
+}
+
+// Given a category name, return the corresponding text CSS class, or a default if not found.
+function getCategoryTextClass(category: string): string {
+  const found = newsCategories.find((c) => c.name === category);
+  return found?.text ?? 'text-gray-100';
+}
+
+// Helper function: given an « imageURL » from frontmatter (e.g. '/news/placeholder.jpg'),
+// strip it down to just the filename (placeholder.jpg) and look up that file in our « newsImages » object.
+// If there’s no match, return « undefined ».
+function resolveImage(imageURL?: string): string | undefined {
+  if (!imageURL) return undefined;
+  const filename = imageURL.split('/').pop();
+  return Object.entries(newsImages).find(([key]) =>
+    key.endsWith('/' + filename)
+  )?.[1];
+}
 ---
 
 <section class="bg-neutral-100 py-4">
   <div class="max-w-6xl mx-auto px-4">
-    <!-- Section Header -->
     <div class="mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-0">
       <div class="bg-red-800 inline-block px-4 py-2 transition-transform duration-300 hover:scale-105 hover:rotate-2">
         <h2 class="text-2xl font-bold text-white">National Headlines</h2>
       </div>
-      <a href="#" class="sm:ml-4 text-red-800 font-semibold hover:text-red-900 transition-colors text-base">See all stories →</a>
+      <a
+        href="#"
+        class="sm:ml-4 text-red-800 font-semibold hover:text-red-900 transition-colors text-base"
+      >
+        See all stories →
+      </a>
     </div>
 
-    <!-- News Grid -->
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2.5fr] items-stretch">
-      <!-- Featured Article -->
       {featured && (
-      <article class="relative overflow-hidden h-full flex rounded-lg group">
-        <Image 
-          src={imageMap[featured.data.imageURL as keyof typeof imageMap]} 
-          alt={featured.data.title || 'News image'} 
-          class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.025]" 
-          loading="lazy" 
-        />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-        <div class="relative z-10 flex flex-col justify-end h-full p-6">
-          <span class={`inline-block px-3 py-1 text-xs font-bold ${featured.data.categoryColour.split(' ')[0]} text-white`} style="max-width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{featured.data.category}</span>
-          <h3 class="mt-2 text-2xl font-bold text-white">{featured.data.title}</h3>
-          <p class="mt-2 text-white/80 max-w-xl line-clamp-2 text-base">{featured.data.description}</p>
-          <div class="flex items-center gap-4 mt-4 text-white/80 text-xs">
-            <span>BY {featured.data.author}</span>
-            <span class="flex items-center gap-1">
-              <svg class="w-4 h-4 inline-block" fill="currentColor" viewBox="0 0 20 20"><path d="M6 2a1 1 0 00-1 1v1H5a3 3 0 00-3 3v8a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3h-.002V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm-1 5h10a1 1 0 011 1v1H4V8a1 1 0 011-1zm-1 3h12v5a1 1 0 01-1 1H5a1 1 0 01-1-1v-5z"/></svg>
-              {featured.data.date}
-            </span>
-          </div>
-        </div>
-      </article>
-      )}
-
-      <!-- Side Articles -->
-      <div class="flex flex-col gap-4 h-full overflow-y-auto pr-1 custom-scroll">
-  {sideArticles.map((article) => (
-    <article class="flex gap-4 bg-white overflow-hidden rounded-lg min-h-[80px]">
-      <Image 
-        src={imageMap[article.data.imageURL as keyof typeof imageMap]} 
-        alt={article.data.title || 'News image'} 
-        class="w-36 h-full object-cover" 
-        loading="lazy" 
-      />
-            <div class="flex flex-col justify-center flex-1 p-2">
-              <span class={`text-xs font-bold uppercase ${article.data.categoryColour.split(' ')[1]}`}>{article.data.category}</span>
-              <h3 class="mt-1 text-sm font-bold text-neutral-800 line-clamp-2">{article.data.title}</h3>
-              <div class="flex items-center gap-2 mt-1 text-neutral-500 text-xs whitespace-nowrap">
-                <svg class="w-4 h-4 inline-block" fill="currentColor" viewBox="0 0 20 20"><path d="M6 2a1 1 0 00-1 1v1H5a3 3 0 00-3 3v8a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3h-.002V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm-1 5h10a1 1 0 011 1v1H4V8a1 1 0 011-1zm-1 3h12v5a1 1 0 01-1 1H5a1 1 0 01-1-1v-5z"/></svg>
-                {article.data.date}
-                <span class="mx-1">•</span>
-                <span>{article.data.author}</span>
+        <a href={featured.data.link} class="block group">
+          <article class="relative overflow-hidden h-full flex">
+            <Image
+              src={resolveImage(featured.data.imageURL) ?? '/placeholder.jpg'}
+              alt={featured.data.title || 'News image'}
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.025]"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            <div class="relative z-10 flex flex-col justify-end h-full p-6">
+              <span
+                class={`w-fit px-3 py-1 text-xs font-bold ${getCategoryBGClass(
+                  featured.data.category
+                )} text-white`}
+              >
+                {featured.data.category}
+              </span>
+              <h3 class="mt-2 text-2xl font-bold text-white">
+                {featured.data.title}
+              </h3>
+              <p class="mt-2 text-white/80 max-w-xl line-clamp-2 text-base">
+                {featured.data.description}
+              </p>
+              <div class="flex items-center gap-4 mt-4 text-white/80 text-xs">
+                <span>BY {featured.data.author}</span>
+                <span class="flex items-center gap-1">
+                  <svg class="w-4 h-4 inline-block" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M6 2a1 1 0 00-1 1v1H5a3 3 0 00-3 3v8a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3h-.002V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm-1 5h10a1 1 0 011 1v1H4V8a1 1 0 011-1zm-1 3h12v5a1 1 0 01-1 1H5a1 1 0 01-1-1v-5z"/>
+                  </svg>
+                  {featured.data.date}
+                </span>
               </div>
             </div>
           </article>
+        </a>
+      )}
+
+      <div class="flex flex-col gap-4 h-full overflow-y-auto pr-1 custom-scroll">
+        {sideArticles.map((article) => (
+          <a href={article.data.link} class="block">
+            <article class="flex gap-4 bg-white overflow-hidden min-h-[80px]">
+              <Image
+                src={resolveImage(article.data.imageURL)}
+                alt={article.data.title || 'News image'}
+                class="w-36 h-full object-cover"
+                loading="lazy"
+              />
+              <div class="flex flex-col justify-center flex-1 p-2">
+                <span
+                  class={`text-xs font-bold uppercase ${getCategoryTextClass(
+                    article.data.category
+                  )}`}
+                >
+                  {article.data.category}
+                </span>
+                <h3 class="mt-1 text-sm font-bold text-neutral-800 line-clamp-2">
+                  {article.data.title}
+                </h3>
+                <div class="flex items-center gap-2 mt-1 text-neutral-500 text-xs whitespace-nowrap">
+                  <svg class="w-4 h-4 inline-block" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M6 2a1 1 0 00-1 1v1H5a3 3 0 00-3 3v8a3 3 a0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3h-.002V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm-1 5h10a1 1 0 011 1v1H4V8a1 1 0 011-1zm-1 3h12v5a1 1 0 01-1 1H5a1 1 0 01-1-1v-5z"/>
+                  </svg>
+                  {article.data.date}
+                  <span class="mx-1">•</span>
+                  <span>{article.data.author}</span>
+                </div>
+              </div>
+            </article>
+          </a>
         ))}
       </div>
     </div>

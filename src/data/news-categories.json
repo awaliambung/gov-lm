@@ -1,0 +1,12 @@
+[
+  { "name": "POLITICS", "bg": "bg-blue-700", "text": "text-blue-700" },
+  { "name": "ECONOMY", "bg": "bg-red-700", "text": "text-red-700" },
+  { "name": "TRAVEL", "bg": "bg-green-600", "text": "text-green-600" },
+  { "name": "HEALTH", "bg": "bg-pink-700", "text": "text-pink-700" },
+  { "name": "SCIENCE", "bg": "bg-purple-700", "text": "text-purple-700" },
+  { "name": "TECHNOLOGY", "bg": "bg-gray-800", "text": "text-gray-800" },
+  { "name": "SPORT", "bg": "bg-yellow-600", "text": "text-yellow-600" },
+  { "name": "CULTURE", "bg": "bg-orange-700", "text": "text-orange-700" },
+  { "name": "WEATHER", "bg": "bg-cyan-700", "text": "text-cyan-700" },
+  { "name": "WORLD", "bg": "bg-indigo-800", "text": "text-indigo-800" }
+]
